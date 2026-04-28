@@ -700,6 +700,142 @@ section { padding: var(--section-pad); position: relative; z-index: 1; }
     white-space: nowrap;
 }
 
-/* Add bottom padding to body so sticky bar doesn't cover content */
-body { padding-bottom: 80px; }
+/* =============================================
+   ANIMATIONS & EFFECTS
+   ============================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.reveal-left.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.reveal-right.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Background floating spheres */
+.bg-spheres {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+.sphere {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: float 20s infinite alternate ease-in-out;
+}
+.sphere-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary);
+    top: -100px;
+    right: -100px;
+}
+.sphere-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--gold);
+    bottom: 10%;
+    left: -50px;
+    animation-delay: -5s;
+}
+.sphere-3 {
+    width: 250px;
+    height: 250px;
+    background: var(--primary);
+    top: 40%;
+    right: 15%;
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, 60px) scale(1.1); }
+}
+
+/* Hover effects for glass cards */
+.glass-card {
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1), border-color 0.4s, box-shadow 0.4s;
+}
+.glass-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(212,175,55,0.3);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 20px rgba(155,81,224,0.1);
+}
+
+/* Glowing text animation */
+.text-glow-alt {
+    animation: textGlow 3s infinite alternate ease-in-out;
+}
+@keyframes textGlow {
+    0% { text-shadow: 0 0 10px rgba(212,175,55,0.2); }
+    100% { text-shadow: 0 0 25px rgba(212,175,55,0.5); }
+}
+
+/* Floating animation for mockup */
+.book-mockup img {
+    animation: floatingMockup 4s infinite alternate ease-in-out;
+}
+@keyframes floatingMockup {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-15px); }
+}
+
+/* Enhancing sticky bar entry */
+.sticky-bar {
+    transition: transform 0.6s cubic-bezier(0.3, 1, 0.2, 1), opacity 0.4s;
+    opacity: 0;
+}
+.sticky-bar.visible {
+    opacity: 1;
+}
+
+/* Button pulse refinement */
+.btn-pulse {
+    position: relative;
+    overflow: hidden;
+}
+.btn-pulse::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shine 3s infinite;
+}
+@keyframes shine {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
 

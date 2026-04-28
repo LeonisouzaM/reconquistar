@@ -33,8 +33,15 @@
 </head>
 <body>
 
+<!-- Background Spheres -->
+<div class="bg-spheres">
+    <div class="sphere sphere-1"></div>
+    <div class="sphere sphere-2"></div>
+    <div class="sphere sphere-3"></div>
+</div>
+
 <!-- A — ATENÇÃO -->
-<header class="hero aida-attention">
+<header class="hero aida-attention reveal">
     <div class="container">
         <div class="badge-wrapper">
             <span class="badge">⚠️ Se você já terminou com alguém, leia isso antes de fazer qualquer coisa</span>
@@ -80,7 +87,7 @@
 </header>
 
 <!-- I — INTERESSE -->
-<section class="identification aida-interest">
+<section class="identification aida-interest reveal">
     <div class="container">
         <div class="aida-phase-label"><span>FASE I — INTERESSE</span></div>
         <div class="content-box glass-card">
@@ -89,7 +96,7 @@
                 O celular na mão a cada 5 minutos. A ansiedade de domingo à noite. A sensação de que está perdendo alguém que não vai encontrar de novo.
             </p>
             <div class="pain-points">
-                <div class="pain-text">
+                <div class="pain-text reveal-left">
                     <p>Você tenta ocupar a mente, mas a cabeça volta sempre para o mesmo lugar. E a vontade de mandar um <em>"Oi, podemos conversar?"</em> é quase impossível de segurar.</p>
                     <p>O problema é que você sente que qualquer passo errado pode destruir para sempre a chance de voltar.</p>
                     <p>E você está certo(a). <strong>Um passo errado pode ser definitivo.</strong></p>
@@ -97,7 +104,7 @@
                         <p>💡 <strong>O que a maioria faz:</strong> Age no desespero, aparece mais, explica mais, implora mais — e faz o outro se afastar ainda mais rápido.</p>
                     </div>
                 </div>
-                <div class="pain-errors">
+                <div class="pain-errors reveal-right">
                     <h3>🚫 Pare agora se você está fazendo isso:</h3>
                     <ul class="error-list">
                         <li>Ligar de madrugada "só para ouvir a voz"</li>
@@ -114,7 +121,7 @@
 </section>
 
 <!-- D — DESEJO (Parte 1) -->
-<section class="ancient-secret aida-desire-1">
+<section class="ancient-secret aida-desire-1 reveal">
     <div class="container">
         <div class="aida-phase-label"><span>FASE D — DESEJO</span></div>
         <div class="power-box glass-card">
@@ -132,9 +139,9 @@
 </section>
 
 <!-- D — DESEJO (Parte 2): Produto -->
-<section class="presentation aida-desire-2">
+<section class="presentation aida-desire-2 reveal">
     <div class="container grid-2">
-        <div class="product-showcase">
+        <div class="product-showcase reveal-left">
             <div class="book-mockup">
                 <img src="hero-mockup.png" alt="Código da Reconquista — Ebook" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
                 <div class="fallback-book" style="display:none">
@@ -144,7 +151,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-content">
+        <div class="text-content reveal-right">
             <h2>O <span class="highlight-gold">Código da Reconquista</span></h2>
             <p>O guia completo e passo a passo para reativar o desejo e a atração no seu ex — de forma estratégica, sutil e sem parecer desesperado(a).</p>
             <p style="color:var(--text-muted);">Você vai aprender:</p>
@@ -249,7 +256,7 @@
 </section>
 
 <!-- A — AÇÃO -->
-<section id="offer" class="offer-section aida-action">
+<section id="offer" class="offer-section aida-action reveal">
     <div class="container">
         <div class="aida-phase-label"><span>FASE A — AÇÃO</span></div>
         <div class="price-box glass-card">
@@ -367,10 +374,30 @@
 </div>
 
 <script>
-    // Smooth scroll (apenas para âncoras internas)
+    // Intersection Observer for Scroll Animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', e => {
-            const target = document.querySelector(a.getAttribute('href'));
+            const targetId = a.getAttribute('href');
+            if (targetId === '#') return;
+            const target = document.querySelector(targetId);
             if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
         });
     });
@@ -385,7 +412,7 @@
         });
     });
 
-    // Sticky bar — aparece após 400px de scroll
+    // Sticky bar
     const stickyBar = document.getElementById('stickyBar');
     window.addEventListener('scroll', () => {
         stickyBar.classList.toggle('visible', window.scrollY > 400);
