@@ -5,14 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Código da Reconquista – Recupere quem você ama</title>
     <meta name="description" content="Descubra o método real para recuperar o interesse de quem você ama sem parecer desesperado(a).">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
+
+    <!-- Favicon leve -->
+    <link rel="icon" type="image/jpeg" href="favicon_opt.jpg">
+    <link rel="apple-touch-icon" href="favicon_opt.jpg">
+
+    <!-- DNS Prefetch para domínios externos -->
+    <link rel="dns-prefetch" href="https://connect.facebook.net">
+    <link rel="dns-prefetch" href="https://fast.wistia.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://ui-avatars.com">
+
+    <!-- Google Fonts com display=swap (não bloqueia render) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
 
-    <!-- Facebook Pixel -->
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Facebook Pixel (diferido) -->
     <script>
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -29,7 +43,6 @@
         <img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=1279130017505768&ev=PageView&noscript=1"/>
     </noscript>
-    <!-- Fim do Facebook Pixel -->
 </head>
 <body>
 
@@ -55,11 +68,16 @@
 
         <div class="vsl-wrapper">
             <p class="vsl-label">▶ Assista ao vídeo abaixo antes de continuar</p>
-            <div class="vsl-container">
-                <script src="https://fast.wistia.com/player.js" async></script>
-                <script src="https://fast.wistia.com/embed/7x8igqmh50.js" async type="module"></script>
-                <style>wistia-player[media-id='7x8igqmh50']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/7x8igqmh50/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style>
-                <wistia-player media-id="7x8igqmh50" aspect="0.5625"></wistia-player>
+            <div class="vsl-container" id="vslContainer">
+                <!-- Wistia carregado após interação do usuário para não bloquear LCP -->
+                <div id="vslPlaceholder" style="position:relative;width:100%;padding-top:177.78%;background:#000;cursor:pointer;" onclick="loadWistia()">
+                    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+                        <div style="width:64px;height:64px;background:rgba(155,81,224,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+                        </div>
+                        <span style="color:#f9d976;font-size:.85rem;font-weight:700;letter-spacing:1px;">CLIQUE PARA ASSISTIR</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -143,7 +161,7 @@
     <div class="container grid-2">
         <div class="product-showcase reveal-left">
             <div class="book-mockup">
-                <img src="hero-mockup.png" alt="Código da Reconquista — Ebook" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <img src="hero-mockup_opt.jpg" alt="Código da Reconquista — Ebook" loading="lazy" width="680" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
                 <div class="fallback-book" style="display:none">
                     <h2>Código da Reconquista</h2>
                     <div class="gold-line"></div>
@@ -233,7 +251,7 @@
         <div class="testimonials-grid">
             <div class="testimonial glass-card">
                 <div class="test-header">
-                    <img src="avatar1.png" alt="Juliana S." onerror="this.src='https://ui-avatars.com/api/?name=J+S&background=9b51e0&color=fff';">
+                    <img src="avatar1_opt.jpg" alt="Juliana S." loading="lazy" width="56" height="56" decoding="async" onerror="this.src='https://ui-avatars.com/api/?name=J+S&background=9b51e0&color=fff';">
                     <div class="test-info">
                         <strong>Juliana S.</strong>
                         <div class="stars">★★★★★</div>
@@ -243,7 +261,7 @@
             </div>
             <div class="testimonial glass-card">
                 <div class="test-header">
-                    <img src="avatar2.png" alt="Ricardo M." onerror="this.src='https://ui-avatars.com/api/?name=R+M&background=9b51e0&color=fff';">
+                    <img src="avatar2_opt.jpg" alt="Ricardo M." loading="lazy" width="56" height="56" decoding="async" onerror="this.src='https://ui-avatars.com/api/?name=R+M&background=9b51e0&color=fff';">
                     <div class="test-info">
                         <strong>Ricardo M.</strong>
                         <div class="stars">★★★★★</div>
@@ -277,9 +295,10 @@
             </a>
             <div class="safe-checkout mt-4">
                 <div class="payment-icons">
-                    <img src="https://img.icons8.com/color/48/pix.png" alt="Pix" width="30">
-                    <img src="https://img.icons8.com/color/48/mastercard.png" alt="Mastercard" width="30">
-                    <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" width="30">
+                    <!-- Ícones inline SVG — zero requests externos -->
+                    <span class="pay-icon" title="Pix" style="background:#32bcad;color:#fff;font-size:.65rem;font-weight:800;border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center;">PIX</span>
+                    <span class="pay-icon" title="Mastercard" style="background:linear-gradient(90deg,#eb001b,#f79e1b);border-radius:6px;padding:4px 10px;display:inline-flex;align-items:center;font-size:.6rem;font-weight:900;color:#fff;">MC</span>
+                    <span class="pay-icon" title="Visa" style="background:#1a1f71;color:#fff;font-size:.65rem;font-weight:900;letter-spacing:1px;border-radius:6px;padding:4px 8px;display:inline-flex;align-items:center;">VISA</span>
                 </div>
                 <p>🔒 Pagamento 100% seguro • Acesso imediato</p>
             </div>
@@ -295,7 +314,13 @@
     <div class="container">
         <div class="guarantee-inner">
             <div class="seal">
-                <img src="https://img.icons8.com/fluency/144/approval.png" alt="Garantia 7 dias">
+                <!-- SVG inline — zero request externo -->
+                <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Garantia 7 dias">
+                    <circle cx="55" cy="55" r="52" fill="#0f172a" stroke="#d4af37" stroke-width="3"/>
+                    <path d="M55 20 L62 38 L82 38 L67 50 L73 68 L55 57 L37 68 L43 50 L28 38 L48 38 Z" fill="#d4af37" opacity="0.15"/>
+                    <path d="M36 55 L49 68 L74 43" stroke="#d4af37" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <text x="55" y="88" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="700" fill="#f9d976">7 DIAS</text>
+                </svg>
             </div>
             <div>
                 <h2>Garantia Incondicional de <span class="highlight-gold">7 Dias</span></h2>
@@ -374,49 +399,54 @@
 </div>
 
 <script>
-    // Intersection Observer for Scroll Animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+    // ── Wistia on-demand loader ──────────────────────────────────
+    function loadWistia() {
+        var ph = document.getElementById('vslPlaceholder');
+        ph.innerHTML = '<script src="https://fast.wistia.com/player.js" async><\/script>' +
+            '<script src="https://fast.wistia.com/embed/7x8igqmh50.js" async type="module"><\/script>' +
+            '<style>wistia-player[media-id="7x8igqmh50"]:not(:defined){background:center/contain no-repeat url("https://fast.wistia.com/embed/medias/7x8igqmh50/swatch");display:block;filter:blur(5px);padding-top:177.78%}<\/style>' +
+            '<wistia-player media-id="7x8igqmh50" aspect="0.5625"><\/wistia-player>';
+    }
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    // ── Scroll Animations ────────────────────────────────────────
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+                observer.unobserve(entry.target); // unobserve após ativar
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(function(el) {
         observer.observe(el);
     });
 
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            const targetId = a.getAttribute('href');
-            if (targetId === '#') return;
-            const target = document.querySelector(targetId);
+    // ── Smooth scroll ────────────────────────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+            var id = a.getAttribute('href');
+            if (id === '#') return;
+            var target = document.querySelector(id);
             if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
         });
     });
 
-    // FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const item = btn.closest('.faq-item');
-            const isOpen = item.classList.contains('open');
-            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    // ── FAQ Accordion ────────────────────────────────────────────
+    document.querySelectorAll('.faq-question').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var item = btn.closest('.faq-item');
+            var isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
             if (!isOpen) item.classList.add('open');
         });
     });
 
-    // Sticky bar
-    const stickyBar = document.getElementById('stickyBar');
-    window.addEventListener('scroll', () => {
+    // ── Sticky bar (passive listener) ───────────────────────────
+    var stickyBar = document.getElementById('stickyBar');
+    window.addEventListener('scroll', function() {
         stickyBar.classList.toggle('visible', window.scrollY > 400);
-    });
+    }, { passive: true });
 </script>
 </body>
 </html>
