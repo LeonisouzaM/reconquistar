@@ -474,6 +474,16 @@
     window.addEventListener('scroll', function() {
         stickyBar.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
+
+    // ── Repasse de Parâmetros UTM para o Checkout ───────────────
+    var searchParams = window.location.search;
+    if (searchParams) {
+        document.querySelectorAll('a[href*="pay.kirvano.com"]').forEach(function(link) {
+            var url = link.getAttribute('href');
+            var separator = url.indexOf('?') !== -1 ? '&' : '?';
+            link.setAttribute('href', url + separator + searchParams.substring(1));
+        });
+    }
 </script>
 </body>
 </html>
