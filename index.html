@@ -69,14 +69,19 @@
         <div class="vsl-wrapper">
             <p class="vsl-label">▶ Assista ao vídeo abaixo antes de continuar</p>
             <div class="vsl-container" id="vslContainer">
-                <!-- Wistia carregado após interação do usuário para não bloquear LCP -->
-                <div id="vslPlaceholder" style="position:relative;width:100%;padding-top:177.78%;background:#000;cursor:pointer;" onclick="loadWistia()">
+                <!-- Placeholder exibido enquanto o Wistia não carrega -->
+                <div id="vslPlaceholder" style="position:relative;width:100%;padding-top:177.78%;background:#000;border-radius:12px;">
                     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
-                        <div style="width:64px;height:64px;background:rgba(155,81,224,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+                        <div style="width:56px;height:56px;background:rgba(155,81,224,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
                         </div>
-                        <span style="color:#f9d976;font-size:.85rem;font-weight:700;letter-spacing:1px;">CLIQUE PARA ASSISTIR</span>
+                        <span style="color:#f9d976;font-size:.82rem;font-weight:700;letter-spacing:1px;">Carregando vídeo...</span>
                     </div>
+                </div>
+                <!-- Wistia embed real (carregado por JS após viewport) -->
+                <div id="vslEmbed" style="display:none;">
+                    <style>wistia-player[media-id='7x8igqmh50']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/7x8igqmh50/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style>
+                    <wistia-player media-id="7x8igqmh50" aspect="0.5625"></wistia-player>
                 </div>
             </div>
         </div>
@@ -399,14 +404,38 @@
 </div>
 
 <script>
-    // ── Wistia on-demand loader ──────────────────────────────────
+    // ── Wistia lazy loader (carrega quando entra no viewport) ────
+    var wistiaLoaded = false;
     function loadWistia() {
-        var ph = document.getElementById('vslPlaceholder');
-        ph.innerHTML = '<script src="https://fast.wistia.com/player.js" async><\/script>' +
-            '<script src="https://fast.wistia.com/embed/7x8igqmh50.js" async type="module"><\/script>' +
-            '<style>wistia-player[media-id="7x8igqmh50"]:not(:defined){background:center/contain no-repeat url("https://fast.wistia.com/embed/medias/7x8igqmh50/swatch");display:block;filter:blur(5px);padding-top:177.78%}<\/style>' +
-            '<wistia-player media-id="7x8igqmh50" aspect="0.5625"><\/wistia-player>';
+        if (wistiaLoaded) return;
+        wistiaLoaded = true;
+
+        // Carregar player.js principal
+        var s1 = document.createElement('script');
+        s1.src = 'https://fast.wistia.com/player.js';
+        s1.async = true;
+        document.head.appendChild(s1);
+
+        // Carregar embed específico do vídeo
+        var s2 = document.createElement('script');
+        s2.src = 'https://fast.wistia.com/embed/7x8igqmh50.js';
+        s2.async = true;
+        s2.type = 'module';
+        document.head.appendChild(s2);
+
+        // Mostrar embed e esconder placeholder
+        document.getElementById('vslPlaceholder').style.display = 'none';
+        document.getElementById('vslEmbed').style.display = 'block';
     }
+
+    // Auto-carrega quando o container entra na tela
+    var vslObserver = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+            loadWistia();
+            vslObserver.disconnect();
+        }
+    }, { threshold: 0.2 });
+    vslObserver.observe(document.getElementById('vslContainer'));
 
     // ── Scroll Animations ────────────────────────────────────────
     var observer = new IntersectionObserver(function(entries) {
