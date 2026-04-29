@@ -26,19 +26,7 @@
     <!-- CSS principal -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Facebook Pixel (diferido) -->
-    <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1279130017505768');
-        fbq('track', 'PageView');
-    </script>
+    <!-- Facebook Pixel (diferido via JS) -->
     <noscript>
         <img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=1279130017505768&ev=PageView&noscript=1"/>
@@ -404,19 +392,30 @@
 </div>
 
 <script>
-    // ── Wistia lazy loader (carrega quando entra no viewport) ────
-    var wistiaLoaded = false;
-    function loadWistia() {
-        if (wistiaLoaded) return;
-        wistiaLoaded = true;
+    // ── Lazy loader (carrega scripts pesados após interação) ────
+    var scriptsLoaded = false;
+    function loadScripts() {
+        if (scriptsLoaded) return;
+        scriptsLoaded = true;
 
-        // Carregar player.js principal
+        // 1. Carregar Facebook Pixel
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1279130017505768');
+        fbq('track', 'PageView');
+
+        // 2. Carregar Wistia JS
         var s1 = document.createElement('script');
         s1.src = 'https://fast.wistia.com/player.js';
         s1.async = true;
         document.head.appendChild(s1);
 
-        // Carregar embed específico do vídeo
         var s2 = document.createElement('script');
         s2.src = 'https://fast.wistia.com/embed/7x8igqmh50.js';
         s2.async = true;
@@ -424,18 +423,17 @@
         document.head.appendChild(s2);
 
         // Mostrar embed e esconder placeholder
-        document.getElementById('vslPlaceholder').style.display = 'none';
-        document.getElementById('vslEmbed').style.display = 'block';
+        var ph = document.getElementById('vslPlaceholder');
+        if (ph) ph.style.display = 'none';
+        var em = document.getElementById('vslEmbed');
+        if (em) em.style.display = 'block';
     }
 
-    // Auto-carrega quando o container entra na tela
-    var vslObserver = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting) {
-            loadWistia();
-            vslObserver.disconnect();
-        }
-    }, { threshold: 0.2 });
-    vslObserver.observe(document.getElementById('vslContainer'));
+    // Gatilhos de carregamento (interação do usuário ou 3.5s)
+    ['scroll', 'mousemove', 'touchstart', 'click'].forEach(function(evt) {
+        window.addEventListener(evt, loadScripts, { once: true, passive: true });
+    });
+    setTimeout(loadScripts, 3500);
 
     // ── Scroll Animations ────────────────────────────────────────
     var observer = new IntersectionObserver(function(entries) {
